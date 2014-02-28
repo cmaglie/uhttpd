@@ -19,6 +19,7 @@
 #include "uhttpd.h"
 #include "uhttpd-utils.h"
 #include "uhttpd-file.h"
+#include "uhttpd-alias.h"
 
 #ifdef HAVE_CGI
 #include "uhttpd-cgi.h"
@@ -76,6 +77,15 @@ static void uh_config_parse(struct config *conf)
 							"authentication on %s\n", col1, line
 					);
 				}
+			}
+			else if (!strncmp(line, "A:", 2))
+			{
+				if (!(col1 = strchr(line, ':')) || (*col1++ = 0) ||
+					!(col2 = strchr(col1, ':')) || (*col2++ = 0) ||
+					!(eol = strchr(col2, '\n')) || (*eol++  = 0))
+					continue;
+
+				uh_alias_add(strdup(col1), strdup(col2));
 			}
 			else if (!strncmp(line, "I:", 2))
 			{
@@ -300,7 +310,8 @@ static struct http_request * uh_http_header_parse(struct client *cl,
 		}
 		else
 		{
-			req->url = path;
+			req->orig_url = path;
+			uh_alias_transform(req->orig_url, req->url, sizeof(req->url));
 		}
 
 		/* check version */

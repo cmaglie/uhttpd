@@ -17,6 +17,7 @@
  */
 
 #ifndef _UHTTPD_
+#define _UHTTPD_
 
 #define _BSD_SOURCE
 #define _XOPEN_SOURCE 700
@@ -144,7 +145,8 @@ struct http_request {
 	enum http_method method;
 	enum http_version version;
 	int redirect_status;
-	char *url;
+	char *orig_url;
+	char url[512];
 	char *headers[UH_LIMIT_HEADERS];
 	struct auth_realm *realm;
 };

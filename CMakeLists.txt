@@ -33,7 +33,7 @@ IF(HAVE_SHADOW)
 	ADD_DEFINITIONS(-DHAVE_SHADOW)
 ENDIF()
 
-SET(SOURCES uhttpd.c uhttpd-file.c uhttpd-utils.c)
+SET(SOURCES uhttpd.c uhttpd-file.c uhttpd-utils.c uhttpd-alias.c)
 FIND_LIBRARY(LIBS crypt)
 IF(LIBS STREQUAL "LIBS-NOTFOUND")
 	SET(LIBS "")
